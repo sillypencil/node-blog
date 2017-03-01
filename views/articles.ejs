@@ -1,0 +1,7 @@
+<%- include("header") %>
+
+<% articles.forEach(function( article) { %>
+	<%- include("components/article-content", {article: article}) %>
+<% })%>
+
+<%- include("footer") %>

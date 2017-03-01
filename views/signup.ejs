@@ -1,0 +1,17 @@
+<input type="hidden" value="<%= error %>">
+<div>
+	<form method="post" enctype="multipart/form-data">
+		<input type="text" placeholder="用户名" name="username">
+		<input type="password" placeholder="密码" name="password">
+		<input type="password" placeholder"重复密码" name="repassword">
+		<select name="gender" id="">
+			<option value="m">男</option>
+			<option value="f">女</option>
+			<option value="x">保密</option>
+		</select>
+		<input type="file" name="avatar">
+		<textarea name="bio"></textarea>
+		<input type="submit" value="注册">
+	</form>
+</div>
+

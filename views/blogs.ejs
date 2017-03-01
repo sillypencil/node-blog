@@ -1,0 +1,7 @@
+<%- include("header") %>
+
+<% blogs.forEach(function( blog) { %>
+	<%- include("components/blog-content", {blog: blog}) %>
+<% })%>
+
+<%- include("footer") %>
