@@ -1,5 +1,6 @@
 var express 	= require("express");
 var router 		= express.Router();
+var moment 		= require("moment");
 var BlogModel = require("../models/blogs");
 var CommentModel = require("../models/comments");
 
@@ -11,6 +12,7 @@ router.get("/", function(req, res){
 	var author = req.query.author;
 	BlogModel.getBlogs( author )
 		.then(function( blogs){
+			console.dir(blogs[0]);
 			res.render("blogs",{
 				blogs: blogs
 			});
@@ -19,7 +21,7 @@ router.get("/", function(req, res){
 	// res.render("blogs");
 });
 
-// GET /posts/create 发表文章页
+// GET /blogs/create 发表文章页
 router.get('/create', checkLogin, function(req, res, next) {
   // res.send(req.flash());
   res.render("create");
@@ -36,6 +38,7 @@ router.get('/one/:blogId', function(req, res, next) {
 	])  
 	.then( function( result ){
 		var blog = result[0];
+		console.dir(blog);
 		var comments = result[1];
 		if(!blog){
 			// console.log("文章不存在");
@@ -50,34 +53,51 @@ router.get('/one/:blogId', function(req, res, next) {
 });
 
 router.post("/create", checkLogin, function(req, res, next){
-	 var author = req.session.user._id;
-  var title = req.fields.title;
-  var content = req.fields.content;
-
-  try{
-  	if(!title.length){
-  		throw new Error("请填写标题");
-  	}
-  	if(!content.length){
-  		throw new Error("请填写内容")
-  	} 
-  }catch( e ){
-  	req.flash("error", e.message );
-  }
-  var blog = {
-  	author: author,
-  	title: title,
-  	content: content,
-  	pv: 0
-  }
-  BlogModel.create( blog )
-  	.then(function( result ){
-  		post = result.ops[0];
-  		console.log("发表成功！");
-  		req.flash("success", "发表成功！");
-  		res.redirect( `/blogs/one/${blog._id}` );
-  	})
-  	.catch( next );
+	var author = req.session.user._id;
+	var createTime = moment(new Date()).format();
+	var content = req.body.html;
+	var title = req.body.title;
+	if( req.body.thumbnail ){
+		var thumbnail = req.body.thumbnail;
+	}
+	try{
+		if(!content.length){
+			throw new Error("请填写内容")
+		}
+	}catch( e ){
+		res.json({
+			error: 1,
+			message: e.message
+		});
+	}
+	var blog = {
+	author: author,
+	title: title,
+	content: content,
+	createTime: createTime,
+	// thumbnail: thumbnail,
+	pv: 0
+	}
+	if( thumbnail ){
+		blog.thumbnail = thumbnail;
+	}
+	BlogModel.create( blog )
+	.then(function( result ){
+		var response = {};
+		response.error = 0;
+		response.blogId = blog._id;
+		console.log("发表成功！");
+		req.flash("success", "发表成功！");
+		res.json( response );
+	})
+	.catch(function(e){
+		console.dir(e)
+		var response = {
+			error: 1,
+			e: e,
+		};
+		res.json( response );
+	});
 });
 
 //跳转到修改文章页面

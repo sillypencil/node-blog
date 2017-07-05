@@ -1,11 +1,125 @@
-<%- include("header") %>
-<div>
-	<form method="post" action="/blogs/create">
-		<input type="text" name="title" placeholder="标题"><br/>
-		<textarea name="content" id="" cols="30" rows="10"></textarea>
-		<input type="submit" value="提交">
-	</form>
-	
+<!DOCTYPE html>
+<html>
+<head>
+	<title>新增博客</title>
+	<link rel="stylesheet" href="/frameworks/wangEditor-2.1.23/css/wangEditor.min.css">
+	<%- include("components/common_head")%>
+</head>
+<body>
+<%- include("components/header") %>
+<p class="am-padding-left"><a href="/blogs">博客</a>>><a href="#">新增</a></p>
+<div class="am-padding-bottom-0">
+	<div class="am-g am-padding-top">
+		<div class="am-u-md-4 am-u-sm-12 am-form-group">
+			<label for="doc-ipt-3" class="am-u-sm-3 am-form-label am-padding-left-0">标题</label>
+			<div class="am-u-sm-9 am-padding-left-0 am-padding-right-0">
+				<input type="text" id="title_inputer" placeholder="输入标题">
+			</div>
+		</div>
+		<div class="am-u-md-3 am-u-sm-12 am-u-end am-form-group am-form-file">
+			<button type="button" class="am-btn am-btn-default am-btn-sm">
+				<i class="am-icon-cloud-upload"></i> 选择要上传的文件</button>
+			<input type="file" multiple id="upload_img_content">
+		</div>
+	</div>
 </div>
+<div class="am-padding am-padding-top-0">
+	<div id="test" style="min-height: 400px;">
+	</div>
+</div>
+<div class="am-padding-left">
+	<button id="submit" class="am-btn am-btn-primary">提交</button>
 
-<%- include("footer")%>
+</div>
+<script type="text/javascript" src="/frameworks/wangEditor-2.1.23/js/lib/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/frameworks/wangEditor-2.1.23/js/wangEditor.js"></script>
+<script src="/frameworks/layer-v3.0.3/layer.js"></script>
+<script>
+	//标题
+	$("#title_inputer").keyup(function(){
+		var _this = $(this);
+		setTimeout(function(){
+			var title = _this.val();
+			var content = $("#test");
+			if( content.find("#blog_title").length === 0 ){//不存在标题
+				$('<h1 id="blog_title" style="text-align:center">'+ title +'<h1/>').prependTo( content );
+			}else{ //更新标题
+				content.find("#blog_title").html(title);
+			}
+		},0);
+	});
+	$("#test").on("keyup",function(){
+		var title = $(this).find("#blog_title").text();
+		setTimeout(function(){
+			$("#title_inputer").val( title );
+		},0);
+	});
+
+	//缩略图
+	$("#upload_img_content").change(function(){
+		var file = $(this)[0].files[0];
+		var fileName = $(this)[0].files[0].name;
+		var picReg = /(\.(jpg|png|gif))$/i;
+			if( !picReg.test( fileName ) ){
+				layer.alert("所选文件格式不符！");
+			return;
+		}
+		$load = layer.load();
+		var formData = new FormData();
+		formData.append( "file", file );
+		formData.append( "name", fileName );
+		$.ajax({
+// 		premium_input
+			type 		: "post",
+			url 		: "/upload",
+			data 		: formData,
+			cache 		: false,
+			contentType : false,
+			processData : false,
+			success 	: function( imgUrl ){
+				layer.close( $load );
+				updateThumbnail( imgUrl );
+				console.dir( imgUrl );
+			},
+			error 		: function( error ){
+				layer.close( $load );
+				layer.alert( error );
+			}
+
+		});
+	});
+
+	var editor = new wangEditor('test');
+	editor.config.uploadImgUrl = '/upload';
+	// 配置自定义参数（举例）
+	/* editor.config.uploadParams = {
+	 token: 'abcdefg',
+	 user: 'wangfupeng1988'
+	 };*/
+
+	// 设置 headers（举例）
+	editor.config.uploadHeaders = {
+		'Accept' : 'text/x-json'
+	};
+	editor.create();
+	editor.$txt.html("");
+
+	function updateThumbnail( imgUrl ){
+		if($("#thumbnail").length == 1 ){
+			//已存在，更新
+			$("#thumbnail").attr("src", imgUrl );
+		} else{
+			var thumbnail = $("<img id='thumbnail' style='width:100%' src='"+ imgUrl +"' />" );
+			if( $("#blog_title").length == 0 ){
+				thumbnail.prependTo( $("#test") );
+			} else {
+				thumbnail.insertAfter($("#blog_title"));
+			}
+		}
+	}
+</script>
+
+<%- include("components/footer")%>
+<script src="/js/blogs/create.js"></script>
+</body>
+</html>

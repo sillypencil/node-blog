@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/frameworks/wangEditor-2.1.23/css/wangEditor.min.css">
+</head>
+<body>
+<div id="test">
+    <p>请输入内容...</p>
+</div>
+
+<script type="text/javascript" src="/frameworks/wangEditor-2.1.23/js/lib/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/frameworks/wangEditor-2.1.23/js/wangEditor.js"></script>
+<script>
+    var editor = new wangEditor('test');
+    editor.config.uploadImgUrl = '/upload';
+    // 配置自定义参数（举例）
+   /* editor.config.uploadParams = {
+        token: 'abcdefg',
+        user: 'wangfupeng1988'
+    };*/
+
+    // 设置 headers（举例）
+    editor.config.uploadHeaders = {
+        'Accept' : 'text/x-json'
+    };
+    editor.create();
+</script>
+</body>
+</html>
+

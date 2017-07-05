@@ -14,6 +14,7 @@ router.get('/', checkNotLogin, function(req, res, next) {
 router.post('/', checkNotLogin, function(req, res, next) {
 	var username = req.fields.username;
 	var password = req.fields.password;
+	console.dir(req.fields)
 	try{
 		if( username === "" ) throw new Error("用户名不能为空！");
 		if( password === "" ) throw new Error("密码不能为空！");
@@ -23,25 +24,37 @@ router.post('/', checkNotLogin, function(req, res, next) {
 	}
 	UserModel.getUserByUsername( username )
 		.then(function( user ){
+			// console.dir(user);
+			var result = {};
 			if( !user ){
 				req.flash("error", "用户不存在!");
 				console.log("用户不存在!");
-				return res.redirect("back");
+				result.error = 1;
+				result.message = "用户不存在";
+				// res.send( result );
+				// return res.redirect("back");
 			}
 
 			//密码校验
-			if( sha1(password) !== user.password ){
+			else if( sha1(password) !== user.password ){
 				req.flash("error", "用户名或密码错误");
 				console.log("用户名或密码错误");
-				return res.redirect("back");
+				result.error = 1;
+				result.message = "用户名或密码错误";
+				// res.send( result );
+				// return res.redirect("back");
 			}
-
-			req.flash("success", "登陆成功");
-			console.log("登陆成功");
-			delete user.password;
-			req.session.user = user;
-			res.redirect("/home");
+			else{
+				req.flash("success", "登陆成功");
+				console.log("登陆成功");
+				delete user.password;
+				req.session.user = user;
+				result.error = 0;
+				result.message = "登录成功！";
+			}
+			res.send( result );
 		})
+
 		.catch(next);
 });
 

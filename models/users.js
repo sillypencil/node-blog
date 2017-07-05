@@ -9,5 +9,9 @@ module.exports = {
 			.findOne({username:username})
 			.addCreatedAt()
 			.exec();
+	},
+	getNickname: function( _id ){
+		return User
+			.findOne({_id: _id},{nickName:1}).exec();
 	}
 }

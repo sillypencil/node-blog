@@ -42,22 +42,27 @@
 <body>
 <input type="hidden" value="<%= error %>">
 <header>
-	<div class="log-header">
-		<h1><a href="/">Amaze UI</a> </h1>
-	</div>
+	<!--<div class="log-header">-->
+		<!--<h1><a href="/">Amaze UI</a> </h1>-->
+	<!--</div>-->
 	<div class="log-re">
-		<button type="button" class="am-btn am-btn-default am-radius log-button">登 录</button>
+		<a href="/signin" class="am-btn am-radius log-button">登 录</a>
 	</div>
 </header>
 
 <div class="log">
 	<div class="am-g">
 		<div class="am-u-lg-3 am-u-md-6 am-u-sm-8 am-u-sm-centered log-content">
-			<h1 class="log-title am-animation-slide-top">AmazeUI</h1>
+			<h1 class="log-title am-animation-slide-top"></h1>
 			<br>
-			<form class="am-form" id="log-form">
+			<form class="am-form" id="signup_form" method="post">
 				<div class="am-input-group am-radius am-animation-slide-left">
-					<input type="email" id="doc-vld-email-2-1" class="am-radius" data-validation-message="请输入用户名" placeholder="用户名"  name="username" required/>
+					<input type="text"  class="am-radius" data-validation-message="请输入用户名" placeholder="用户名"  name="username" required/>
+					<span class="am-input-group-label log-icon am-radius"><i class="am-icon-user am-icon-sm am-icon-fw"></i></span>
+				</div>
+				<br>
+				<div class="am-input-group am-radius am-animation-slide-left">
+					<input type="text"  class="am-radius" placeholder="昵称"  name="nickName"/>
 					<span class="am-input-group-label log-icon am-radius"><i class="am-icon-user am-icon-sm am-icon-fw"></i></span>
 				</div>
 				<br>
@@ -71,24 +76,24 @@
 					<span class="am-input-group-label log-icon am-radius"><i class="am-icon-lock am-icon-sm am-icon-fw"></i></span>
 				</div>
 				<br>
-				<div class="am-animation-slide-left log-animation-delay-b">
-					<select class=""am-form-field am-radius log-input name="gender" id="">
-						<option value="m">男</option>
-						<option value="f">女</option>
-						<option value="x">保密</option>
-					</select>
-					<span class="am-input-group-label log-icon am-radius"><i class="am-icon-lock am-icon-sm am-icon-fw"></i></span>
-				</div>
-				<br>
-				<div class="am-input-group am-animation-slide-left log-animation-delay-a">
+				<!--<div class="am-animation-slide-left log-animation-delay-a">-->
+					<!--<select class=""am-form-field am-radius log-input name="gender" id="">-->
+						<!--<option value="m">男</option>-->
+						<!--<option value="f">女</option>-->
+						<!--<option value="x">保密</option>-->
+					<!--</select>-->
+					<!--<span class="am-input-group-label log-icon am-radius"><i class="am-icon-lock am-icon-sm am-icon-fw"></i></span>-->
+				<!--</div>-->
+				<!--<br>-->
+				<!--<div class="am-input-group am-animation-slide-left log-animation-delay-b">
 					<input  class="am-form-field am-radius log-input" type="file" name="avatar">
 					<span class="am-input-group-label log-icon am-radius"><i class="am-icon-lock am-icon-sm am-icon-fw"></i></span>
 				</div>
 				<br>
-				<div class="am-input-group am-animation-slide-left log-animation-delay-a">
+				<div class="am-animation-slide-left log-animation-delay-b">
 					<textarea class="" name="bio"></textarea>
 				</div>
-				<br>
+				<br>-->
 				<button type="submit" class="am-btn am-btn-primary am-btn-block am-btn-lg am-radius am-animation-slide-bottom log-animation-delay-b">注 册</button>
 				<br>
 				<!--<div class="am-btn-group am-animation-slide-bottom log-animation-delay-b">-->
@@ -100,21 +105,13 @@
 			</form>
 		</div>
 	</div>
-	<footer class="log-footer">
-		© 2014 AllMobilize, Inc. Licensed under MIT license.
-	</footer>
 </div>
-
-<!--[if (gte IE 9)|!(IE)]><!-->
-<script src="/frameworks/amazeui.2.7.0/js/jquery.min.js"></script>
-<!--<![endif]-->
-<!--[if lte IE 8 ]>
-<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
-<script src="/frameworks/amazeui.2.7.0/js/amazeui.ie8polyfill.min.js"></script>
-<![endif]-->
-<script src="/frameworks/amazeui.2.7.0/js/amazeui.min.js"></script>
-<script src="/frameworks/amazeui.2.7.0/js/app.js"></script>
+<%- include('components/footer')%>
+<script src="/frameworks/jquery/plugins/jquery.form.min.js"></script>
+<script src="/frameworks/jquery/plugins/jquery.validate.min.js"></script>
+<script src="/frameworks/jquery/plugins/jquery.validate.standard.js"></script>
+<script src="/frameworks/layer-v3.0.3/layer.js"></script>
+<script src="js/signup/signup.js"></script>
 </body>
 </html>
 

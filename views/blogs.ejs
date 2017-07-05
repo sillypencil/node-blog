@@ -1,7 +1,21 @@
-<%- include("header") %>
+<!DOCTYPE html>
+<html>
+<head>
+	<%- include("components/common_head")%>
+</head>
+<body>
 
-<% blogs.forEach(function( blog) { %>
-	<%- include("components/blog-content", {blog: blog}) %>
-<% })%>
+<%- include("components/header") %>
 
-<%- include("footer") %>
+<!-- content srart -->
+<div class="am-g am-g-fixed blog-fixed">
+    <div class="am-u-md-12 am-u-sm-12">
+        <% blogs.forEach(function( blog) { %>
+        <%- include("components/blog-content", {blog: blog}) %>
+        <% })%>
+    </div>
+</div>
+<!-- content end -->
+<%- include("components/footer") %>
+</body>
+</html>

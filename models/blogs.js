@@ -1,6 +1,7 @@
 var marked = require("marked");
 var Blogs = require("../lib/mongo").Blogs;
 var CommentModel = require("./comments");
+var UserModel = require("./users");
 
 module.exports = {
 	//创建文章
@@ -14,7 +15,8 @@ module.exports = {
 			.populate({ path: "author", model:"User"})
 			.addCreatedAt()
 			.addCommentCount()
-			.contentToHtml()
+			.getNickname()
+			// .contentToHtml()
 			.exec();
 	},
 	
@@ -52,7 +54,8 @@ module.exports = {
 			.sort({ _id: -1})
 			.addCreatedAt()
 			.addCommentCount()
-			.contentToHtml()
+			.getNickname()
+			// .contentToHtml()
 			.exec()
 	},
 
@@ -99,4 +102,27 @@ Blogs.plugin("addCommentCount", {
 		}
 		return blog;
 	}
-})
+});
+
+Blogs.plugin("getNickname",{
+	afterFind: function( blogs ) {
+		return Promise.all( blogs.map( function(blog){
+			return UserModel.getNickname( blog.author ).then( function(user){
+				blog.authorName = user.nickName;
+				return blog;
+			});
+		}));
+	},
+
+	afterFindOne: function( blog ){
+		if( blog ){
+			// return UserModel.getNickname( blog.author ).then( function(user){
+			// 		blog.authorName = user.nickName;
+			// 		return blog;
+			// }); 
+			blog.author = null;
+			return blog;
+		}
+		return blog;
+	}
+});
