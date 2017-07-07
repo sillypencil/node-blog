@@ -10,7 +10,6 @@ module.exports = function( app ){
 	app.use("/blogs", require("./blogs"));
 	app.use("/home", require("./home"));
 	app.use("/comments", require("./comments"));
-	app.use("/upload", require("./upload"));
 
 	//404 page
 	app.use(function(req, res, next){

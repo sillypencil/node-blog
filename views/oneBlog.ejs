@@ -1,32 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <%- include("components/common_head")%>
-</head>
-<body>
-
-<%- include("components/header") %>
+<%- include("header") %>
 
 
-<article class="am-g blog-entry-article" onclick="turnToArticle('<%= blog._id %>')">
-    <div>
-        <span> @<%= blog.authorName %> &nbsp;</span>
-        <span><%= blog.created_at %></span>
-    </div>
-    <div class="am-u-sm-12 blog-entry-text">
-        <% if(blog.title){ %>
-            <h1 style="text-align: center"><%= blog.title %></h1>
-        <% } %>
-        <% if(blog.thumbnail){ %>
-            <img src="<%= blog.thumbnail %>" style="width: 100%;" alt="">
-        <% } %>
-        <%- blog.content  %>
-        <p><a href="" class="blog-continue">continue reading</a></p>
-    </div>
-</article>
+<%- include("components/blog-content", {blog: blog}) %>
 <%- include("components/comments", {comments: comments}) %>
 
 
-<%- include("components/footer") %>
-</body>
-</html>
+<%- include("footer") %>
